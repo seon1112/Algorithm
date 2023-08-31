@@ -34,7 +34,7 @@ public class JsoupController {
             String url = "https://festivallife.kr/concert_k/?q=YToyOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjtzOjQ6InBhZ2UiO2k6MTA7fQ%3D%3D&page=" + p + "";
             try {
                 Document doc = Jsoup.connect(url).get(); // jsoup이 url와 연결해서 doucument형태로 가져온다
-                Elements list = doc.getElementsByClass("title title-block"); // url주소의 book_tit 가져와
+                Elements list = doc.getElementsByClass("title title-block"); 
                 for (Element e : list) {
                     Element a = e.getElementsByTag("div").get(0); // "div"태그를 찾아주세요 (근데 무조건 배열로 주니 첫번째)
                     String title = a.text(); // 공연이름
@@ -70,19 +70,19 @@ public class JsoupController {
 
         // fname과 title을 짝지어 db에 넣기
         for (int i = 0; i < flist.size(); i++) {
-            String addr = flist.get(i);
+            String addr = flist.get(i);             
             String eventName = tlist.get(i);		//공연이름
             String eventFname = eventName + ".jpg"; //포스터 이름
 
             try {
-                URL url2 = new URL(addr); //이미지 원격 위치
-                InputStream is = url2.openStream(); //이미지 원격 데이터 가져오기
+                URL url = new URL(addr); //이미지 원격 위치
+                InputStream is = url.openStream(); //이미지 원격 데이터 가져오기
                 FileOutputStream fos = new FileOutputStream("src/main/resources/static/images/" + eventFname); //이미지 로컬 파일
                 FileCopyUtils.copy(is.readAllBytes(), fos); //로컬 파일로 복사
                 is.close();
                 fos.close();
                 
-                //event 테이블
+                //event 테이블에 데이터 추가
                 Event event = new Event();
                 event.setEventfname(eventFname);
                 event.setEventhit(1);
